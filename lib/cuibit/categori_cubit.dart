@@ -11,12 +11,12 @@ class CategoryCubit extends Cubit<CategoryState> {
   /// Emits loading state, then success or error state based on the result
   Future<void> loadCategories() async {
     // Emit loading state to show loading indicator
-    emit(Categoryloading());
+    emit(CategoryLoading());
     try {
       // Fetch categories from the API
       final categories = await ApiService.getCategories();
       // Emit success state with the loaded categories
-      emit(Categoryloaded(categories));
+      emit(CategoryLoaded(categories));
     } catch (e) {
       // Emit error state if something goes wrong
       emit(CategoryError(e.toString()));

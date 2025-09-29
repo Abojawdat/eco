@@ -4,12 +4,12 @@ class CategoryState {}
 
 class CategoryInitial extends CategoryState {}
 
-class Categoryloading extends CategoryState {}
+class CategoryLoading extends CategoryState {}
 
-class Categoryloaded extends CategoryState{
+class CategoryLoaded extends CategoryState{
   final List<Category> categories ;
 
-  Categoryloaded(this.categories);
+  CategoryLoaded(this.categories);
 }
 
 class CategoryError extends CategoryState {

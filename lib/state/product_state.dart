@@ -6,12 +6,12 @@ import '../services/API SERVIC.dart';
 
 class ProductInitial extends Productstate {}
 
-class Productloading extends Productstate {}
+class ProductLoading extends Productstate {}
 
-class Productloaded extends Productstate{
+class ProductLoaded extends Productstate{
   final List<Product> products ;
 
-  Productloaded(this.products);
+  ProductLoaded(this.products);
 }
 
 class ProductError extends Productstate {

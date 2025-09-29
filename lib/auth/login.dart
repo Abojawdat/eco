@@ -49,15 +49,18 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final responsive = ResponsiveHelper(context);
 
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+          padding: EdgeInsets.symmetric(
+            horizontal: responsive.wp(6),
+            vertical: responsive.hp(4),
+          ),
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height - 64,
+              minHeight: MediaQuery.of(context).size.height - responsive.hp(8),
             ),
             child: IntrinsicHeight(
               child: Column(
@@ -65,18 +68,18 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   // top spacing / logo area
                   _buildHeader(context),
-                  const SizedBox(height: 24),
+                  SizedBox(height: responsive.hp(2.4)),
 
                   // Card with form
                   Card(
                     elevation: 6,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(responsive.wp(4)),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0,
-                        vertical: 18.0,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: responsive.wp(5),
+                        vertical: responsive.hp(2.2),
                       ),
                       child: Form(
                         key: _formKey,
@@ -86,19 +89,19 @@ class _LoginPageState extends State<LoginPage> {
                             Text(
                               'Welcome back',
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: responsive.sp(5),
                                 fontFamily: "Cairo",
                               ),
                             ),
-                            const SizedBox(height: 6),
+                            SizedBox(height: responsive.hp(0.8)),
                             Text(
                               'Log in to your account',
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: responsive.sp(3.8),
                                 fontFamily: "Cairo",
                               ),
                             ),
-                            const SizedBox(height: 18),
+                            SizedBox(height: responsive.hp(2)),
 
                             // Email
                             TextFormField(
@@ -110,13 +113,13 @@ class _LoginPageState extends State<LoginPage> {
                                 hintText: 'you@example.com',
                                 prefixIcon: Icon(Icons.email_outlined),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(responsive.wp(3)),
                                 ),
                               ),
                               validator: _validateEmail,
                             ),
 
-                            const SizedBox(height: 12),
+                            SizedBox(height: responsive.hp(1.4)),
 
                             // Password
                             TextFormField(
@@ -128,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                                 labelText: 'Password',
                                 prefixIcon: Icon(Icons.lock_outline),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(responsive.wp(3)),
                                 ),
                                 suffixIcon: IconButton(
                                   icon: Icon(
@@ -146,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                               validator: _validatePassword,
                             ),
 
-                            const SizedBox(height: 12),
+                            SizedBox(height: responsive.hp(1.2)),
 
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                                       child: Text(
                                         'Remember me',
                                         style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: responsive.sp(2.6),
                                           fontFamily: "Cairo",
                                         ),
                                       ),
@@ -181,7 +184,8 @@ class _LoginPageState extends State<LoginPage> {
                                         content: Text(
                                           'Forgot password pressed',
                                           style: TextStyle(
-                                            fontSize: 15,
+                                            // Keep SnackBar text small but readable
+                                            fontSize: 12,
                                             fontFamily: "Cairo",
                                           ),
                                         ),
@@ -191,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                                   child: const Text(
                                     'Forgot password?',
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 12,
                                       fontFamily: "Cairo",
                                     ),
                                   ),
@@ -199,39 +203,39 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
 
-                            const SizedBox(height: 8),
+                            SizedBox(height: responsive.hp(1)),
 
                             SizedBox(
-                              height: 48,
+                              height: responsive.hp(6),
                               child: ElevatedButton(
                                 onPressed: _onLoginPressed,
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(responsive.wp(3)),
                                   ),
                                 ),
                                 child: const Text(
                                   'Log in',
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontFamily: "Cairo",
                                   ),
                                 ),
                               ),
                             ),
 
-                            const SizedBox(height: 12),
+                            SizedBox(height: responsive.hp(1.2)),
 
                             Center(
                               child: Text(
                                 'or continue with',
                                 style: TextStyle(
-                                  fontSize: 15,
+                                  fontSize: responsive.sp(3.6),
                                   fontFamily: "Cairo",
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 10),
+                            SizedBox(height: responsive.hp(1)),
 
                             Row(
                               children: [
@@ -242,13 +246,13 @@ class _LoginPageState extends State<LoginPage> {
                                     label: const Text(
                                       'Google',
                                       style: TextStyle(
-                                        fontSize: 10,
+                                        fontSize: 12,
                                         fontFamily: "Cairo",
                                       ),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 10),
+                                SizedBox(width: responsive.wp(2)),
                                 Expanded(
                                   child: OutlinedButton.icon(
                                     onPressed: () {},
@@ -265,7 +269,7 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
 
-                            const SizedBox(height: 14),
+                            SizedBox(height: responsive.hp(1.4)),
 
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -273,7 +277,7 @@ class _LoginPageState extends State<LoginPage> {
                                 const Text(
                                   "Don't have an account?",
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 12,
                                     fontFamily: "Cairo",
                                   ),
                                 ),
@@ -282,7 +286,7 @@ class _LoginPageState extends State<LoginPage> {
                                   child: const Text(
                                     'Sign up',
                                     style: TextStyle(
-                                      fontSize: 17,
+                                      fontSize: 12,
                                       fontFamily: "Cairo",
                                     ),
                                   ),
@@ -295,18 +299,21 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: responsive.hp(2)),
 
                   // Spacer to push content up on large screens
                   const Spacer(),
 
                   // Small footer note
                   Padding(
-                    padding: const EdgeInsets.only(top: 12.0),
+                    padding: EdgeInsets.only(top: responsive.hp(1.2)),
                     child: Center(
                       child: Text(
                         'By continuing you agree to our Terms & Privacy',
-                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ),
@@ -320,15 +327,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final responsive = ResponsiveHelper(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Decorative top card / logo
         Container(
-          width: 110,
-          height: 110,
+          width: responsive.wp(28),
+          height: responsive.wp(28),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(responsive.wp(7)),
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -337,28 +345,28 @@ class _LoginPageState extends State<LoginPage> {
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.12),
-                blurRadius: 12,
-                offset: const Offset(0, 6),
+                blurRadius: responsive.wp(3),
+                offset: Offset(0, responsive.hp(0.8)),
               ),
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(28), // match outer radius
+            borderRadius: BorderRadius.circular(responsive.wp(7)), // match outer radius
             child: Image.asset(
               'images/elctric.png', // <-- your asset path
               fit: BoxFit.cover,
             ),
           ),
         ),
-        const SizedBox(height: 14),
-        const Text(
+        SizedBox(height: responsive.hp(1.4)),
+        Text(
           'Hello again!',
-          style: TextStyle(fontSize: 20, fontFamily: "Cairo"),
+          style: TextStyle(fontSize: responsive.sp(5), fontFamily: "Cairo"),
         ),
-        const SizedBox(height: 6),
-        const Text(
+        SizedBox(height: responsive.hp(0.6)),
+        Text(
           'Welcome back — please login to continue',
-          style: TextStyle(fontSize: 20, fontFamily: "Cairo"),
+          style: TextStyle(fontSize: responsive.sp(4), fontFamily: "Cairo"),
         ),
       ],
     );

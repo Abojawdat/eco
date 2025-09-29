@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/product.dart';
 import '../models/categories.dart';
+import '../models/product.dart';
 
 /// API Service class that handles all communication with the backend
 /// This class provides methods to fetch categories and products from the API
