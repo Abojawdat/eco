@@ -26,18 +26,21 @@ class _ProductScreenState extends State<ProductScreen> {
       appBar: AppBar(
         title: Text(
           'All Products',
-          style: GoogleFonts.poppins(
+          style:TextStyle(
             fontSize: 20,
+            fontFamily: "Cairo",
             fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+            color: Colors.blueAccent,
+          )
         ),
-        backgroundColor: Colors.green[600],
+      
         elevation: 0,
         centerTitle: true,
       ),
-      body: BlocBuilder<ProductCubit, Productstate>(
-        builder: (context, state) {
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: BlocBuilder<ProductCubit, Productstate>(
+          builder: (context, state) {
           if (state is ProductLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is ProductError) {
@@ -94,12 +97,12 @@ class _ProductScreenState extends State<ProductScreen> {
             }
 
             return GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.7,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
+              padding: EdgeInsets.zero,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 180,
+                childAspectRatio: 1.0,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
               ),
               itemCount: state.products.length,
               itemBuilder: (context, index) {
@@ -110,6 +113,7 @@ class _ProductScreenState extends State<ProductScreen> {
           }
           return const SizedBox.shrink();
         },
+        ),
       ),
     );
   }
@@ -135,65 +139,70 @@ class _ProductScreenState extends State<ProductScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 3,
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                  color: Colors.grey[100],
-                ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                  child: Image.network(
-                    product.fullImageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey[200],
-                        child: const Icon(
-                          Icons.image,
-                          color: Colors.grey,
-                          size: 40,
-                        ),
-                      );
-                    },
-                  ),
+            // Image section - fixed height
+            Container(
+              height: 80,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                color: Colors.grey[100],
+              ),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                child: Image.network(
+                  product.fullImageUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[200],
+                      child: const Icon(
+                        Icons.image,
+                        color: Colors.grey,
+                        size: 40,
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
+            // Content section - flexible
             Expanded(
-              flex: 2,
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(4),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      product.name,
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey[800],
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.name,
+                          style: GoogleFonts.poppins(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[800],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          product.categoryName,
+                          style: GoogleFonts.poppins(
+                            fontSize: 7,
+                            color: Colors.grey[600],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      product.categoryName,
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    const Spacer(),
                     Text(
                       product.formattedPrice,
                       style: GoogleFonts.poppins(
-                        fontSize: 16,
+                        fontSize: 9,
                         fontWeight: FontWeight.bold,
-                        color: Colors.green[600],
+                        color: Colors.cyanAccent[600],
                       ),
                     ),
                   ],

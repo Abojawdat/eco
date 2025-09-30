@@ -4,6 +4,8 @@ import 'package:untitled/cuibit/categori_cubit.dart';
 import 'package:untitled/state/categore_state.dart';
 import '../models/categories.dart';
 import '../models/product.dart';
+import '../pages/product_screen.dart';
+import '../pages/categori_screen.dart';
 import '../resposive_screen.dart';
 
 class homescreen extends StatefulWidget {
@@ -19,14 +21,12 @@ class _homescreenState extends State<homescreen> {
     final responsive = ResponsiveHelper(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("ecomerce")),
+      appBar: AppBar(title: const Text("ECO APP !")),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             const SizedBox(height: 10),
-            const Text("WELLCOME!  .."),
-            const SizedBox(height: 10),
-
             Center(
               child: Container(
                 padding: EdgeInsets.all(8),
@@ -120,7 +120,12 @@ class _homescreenState extends State<homescreen> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(16),
                             onTap: () {
-                              // keep existing logic unchanged (tap can be wired later)
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CategoryScreen(category: category),
+                                ),
+                              );
                             },
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -181,6 +186,31 @@ class _homescreenState extends State<homescreen> {
                 return const SizedBox.shrink();
               },
             ),
+            const SizedBox(height: 20),
+            // Add a button to navigate to products screen
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, 'productscreen');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green[600],
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+                child: Text(
+                  'View All Products',
+                  style: TextStyle(
+                    fontSize: responsive.sp(4),
+                    fontFamily: 'Cairo',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
 
           ],
         ),
@@ -192,6 +222,7 @@ class _homescreenState extends State<homescreen> {
     return GestureDetector(
       onTap: () {
         // TODO: Navigate to product details screen
+         Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductScreen(),));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -216,8 +247,8 @@ class _homescreenState extends State<homescreen> {
                 fit: StackFit.expand,
                 children: [
                   // Product image
-                  Image.network(
-                    product.fullImageUrl,
+                  Image.asset(
+                    product.imageUrl,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(

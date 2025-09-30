@@ -31,17 +31,19 @@ class _CategoryScreenState extends State<CategoryScreen> {
         title: Text(
           widget.category.name,
           style: TextStyle(
-            color: Colors.red,
+            color: Colors.blueAccent,
             fontSize: 20,
             fontFamily: "Cairo",
           ),
         ),
-        backgroundColor: Colors.green[600],
+
         elevation: 0,
         centerTitle: true,
       ),
-      body: BlocBuilder<ProductCubit, Productstate>(
-        builder: (context, state) {
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: BlocBuilder<ProductCubit, Productstate>(
+          builder: (context, state) {
           if (state is ProductLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is ProductError) {
@@ -82,22 +84,23 @@ class _CategoryScreenState extends State<CategoryScreen> {
               );
             }
             return GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.7,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
+              padding: EdgeInsets.zero,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 180,
+                childAspectRatio: 1.0,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
               ),
               itemCount: state.products.length,
               itemBuilder: (context, index) {
                 final product = state.products[index];
-                // return _buildProductCard(product);
+                return _buildProductCard(product);
               },
             );
           }
           return const SizedBox.shrink();
         },
+        ),
       ),
     );
   }
@@ -124,60 +127,74 @@ class _CategoryScreenState extends State<CategoryScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 3,
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(12)),
-                  color: Colors.grey[100],
-                ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(12)),
-                  child: Image.network(
-                    product.fullImageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey[200],
-                        child: const Icon(
-                          Icons.image,
-                          color: Colors.grey,
-                          size: 40,
-                        ),
-                      );
-                    },
-                  ),
+            // Image section - fixed height
+            Container(
+              height: 80,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                color: Colors.grey[100],
+              ),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                child: Image.network(
+                  product.fullImageUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[200],
+                      child: const Icon(
+                        Icons.image,
+                        color: Colors.grey,
+                        size: 40,
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
+            // Content section - flexible
             Expanded(
-              flex: 2,
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(4),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      product.name,
-                      style: TextStyle(fontFamily: "Cairo"),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.name,
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Cairo",
+                            color: Colors.grey[800],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          product.categoryName,
+                          style: TextStyle(
+                            fontSize: 7,
+                            fontFamily: "Cairo",
+                            color: Colors.grey[600],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      product.categoryName,
-                      style: TextStyle(fontFamily: "Cairo",
-                          fontSize: 12),
-
-                    ),
-                    const Spacer(),
                     Text(
                       product.formattedPrice,
-                      style: TextStyle(fontFamily: "Cairo",
-                          fontSize: 12),
+                      style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Cairo",
+                        color: Colors.cyanAccent[600],
+                      ),
                     ),
                   ],
                 ),
