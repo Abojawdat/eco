@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled/cuibit/categori_cubit.dart';
+import 'package:untitled/cuibit/product_cubit.dart';
 import 'package:untitled/state/categore_state.dart';
+import 'package:untitled/state/product_state.dart';
 import '../models/categories.dart';
 import '../models/product.dart';
 import '../pages/product_screen.dart';
@@ -16,6 +18,13 @@ class homescreen extends StatefulWidget {
 }
 
 class _homescreenState extends State<homescreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Load products when home screen initializes
+    context.read<ProductCubit>().loadProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final responsive = ResponsiveHelper(context);
@@ -211,6 +220,57 @@ class _homescreenState extends State<homescreen> {
                 ),
               ),
             ),
+            const SizedBox(height: 20),
+            // Featured Products Section
+            Text(
+              'Featured Products',
+              style: TextStyle(
+                fontSize: responsive.sp(5),
+                fontFamily: "Cairo",
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Products Grid
+            BlocBuilder<ProductCubit, Productstate>(
+              builder: (context, state) {
+                if (state is ProductLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is ProductError) {
+                  return Center(
+                    child: Text(
+                      "Error: ${state.message}",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: responsive.sp(4),
+                        fontFamily: "Cairo",
+                      ),
+                    ),
+                  );
+                } else if (state is ProductLoaded) {
+                  final products = state.products.take(4).toList(); // Show only first 4 products
+                  return SizedBox(
+                    height: responsive.hp(25),
+                    child: GridView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 1,
+                        childAspectRatio: 0.8,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                      ),
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        final product = products[index];
+                        return _buildHomeProductCard(product);
+                      },
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
 
           ],
         ),
@@ -351,6 +411,108 @@ class _homescreenState extends State<homescreen> {
                     ],
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHomeProductCard(Product product) {
+    return GestureDetector(
+      onTap: () {
+        // Navigate to product details or product screen
+        Navigator.pushNamed(context, 'productscreen');
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image section
+            Container(
+              height: 100,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                color: Colors.grey[100],
+              ),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                child: Image.network(
+                  product.fullImageUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[200],
+                      child: const Icon(
+                        Icons.image,
+                        color: Colors.grey,
+                        size: 40,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            // Content section
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.name,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Cairo",
+                            color: Colors.grey[800],
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          product.categoryName,
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontFamily: "Cairo",
+                            color: Colors.grey[600],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                    Text(
+                      product.formattedPrice,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Cairo",
+                        color: Colors.cyanAccent[600],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
