@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../pages/home_screen.dart';
 import '../resposive_screen.dart';
+import '../state/login_state.dart';
+import '../cuibit/login_cubit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -39,13 +42,14 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onLoginPressed() {
     if (_formKey.currentState?.validate() ?? false) {
-      // After validation -> navigate to home
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const homescreen()),
-      );
+      final email = _emailController.text.trim();
+      final password = _passwordController.text;
+
+      // Trigger login through Cubit (which will handle the backend call)
+      context.read<LoginCubit>().login(email, password);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -207,21 +211,41 @@ class _LoginPageState extends State<LoginPage> {
 
                             SizedBox(
                               height: responsive.hp(6),
-                              child: ElevatedButton(
-                                onPressed: _onLoginPressed,
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(responsive.wp(3)),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Log in',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: "Cairo",
-                                  ),
-                                ),
-                              ),
+                              child: BlocConsumer<LoginCubit, LoginState>(
+                                listener: (context, state) {
+                                  if (state is LoginLoaded) {
+                                    Navigator.pushReplacementNamed(context, 'home');
+                                  } else if (state is LoginError) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text(state.message)),
+                                    );
+                                  }
+                                },
+                                builder: (context, state) {
+                                  return SizedBox(
+                                    height: responsive.hp(6),
+                                    child: ElevatedButton(
+                                      onPressed: state is LoginLoading ? null : _onLoginPressed,
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(responsive.wp(3)),
+                                        ),
+                                      ),
+                                      child: state is LoginLoading
+                                          ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                          : const Text(
+                                        'Log in',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontFamily: "Cairo",
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
                             ),
 
                             SizedBox(height: responsive.hp(1.2)),

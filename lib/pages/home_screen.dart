@@ -150,7 +150,7 @@ class _homescreenState extends State<homescreen> {
                                     border: Border.all(color: Colors.grey.shade300),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.05),
+                                        color: Colors.black,
                                         blurRadius: 8,
                                         offset: const Offset(0, 4),
                                       ),
@@ -290,7 +290,7 @@ class _homescreenState extends State<homescreen> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black,
               blurRadius: 12,
               offset: const Offset(0, 6),
             ),
@@ -431,7 +431,7 @@ class _homescreenState extends State<homescreen> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey,
               spreadRadius: 1,
               blurRadius: 4,
               offset: const Offset(0, 2),
