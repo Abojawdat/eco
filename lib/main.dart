@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:untitled/pages/home_screen.dart';
 import 'package:untitled/pages/product_screen.dart';
-import 'package:untitled/pages/categori_screen.dart';
 import './auth/login.dart';
 import './cuibit/categori_cubit.dart';
 import './cuibit/product_cubit.dart';
